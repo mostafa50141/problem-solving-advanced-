@@ -1,0 +1,44 @@
+class Circle {
+  double radius = 0;
+
+  Circle withRadius(double r) {
+    radius = r;
+    return this;
+  }
+
+  double getArea() => 3.14 * radius * radius;
+}
+
+class Rectangle {
+  double width = 0;
+  double height = 0;
+
+  Rectangle withSize(double w, double h) {
+    width = w;
+    height = h;
+    return this;
+  }
+
+  double getArea() => width * height;
+}
+
+String calculateArea(dynamic shape) {
+  if (shape is Circle) {
+    return 'Circle Area: ${shape.getArea()}';
+  } else if (shape is Rectangle) {
+    return 'Rectangle Area: ${shape.getArea()}';
+  } else {
+    return 'Unknown shape';
+  }
+}
+
+void main() {
+  var c = Circle().withRadius(6);
+  var r = Rectangle().withSize(4, 10);
+  var unknown = 'triangle';
+
+  print(calculateArea(c));
+  print(calculateArea(r));
+  print(calculateArea(unknown));
+}
+
