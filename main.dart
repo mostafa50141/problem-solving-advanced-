@@ -1,44 +1,32 @@
-class Circle {
-  double radius = 0;
+enum UserRole { admin, editor, guest }
 
-  Circle withRadius(double r) {
-    radius = r;
-    return this;
-  }
+String formatUser(Map<String, dynamic> data) {
+  final nameBuffer = StringBuffer();
 
-  double getArea() => 3.14 * radius * radius;
-}
+  nameBuffer
+    ..write(data['first'] ?? '')
+    ..write(data['middle'] != null ? ' ${data['middle']}' : '')
+    ..write(data['last'] != null ? ' ${data['last']}' : '');
 
-class Rectangle {
-  double width = 0;
-  double height = 0;
+  final fullName = nameBuffer.toString().trim().isEmpty
+      ? 'Guest'
+      : nameBuffer.toString().trim();
 
-  Rectangle withSize(double w, double h) {
-    width = w;
-    height = h;
-    return this;
-  }
+  final role = (data['role'] is String)
+      ? UserRole.values.firstWhere(
+          (e) => e.name == data['role'].toString().toLowerCase(),
+      orElse: () => UserRole.guest)
+      : UserRole.guest;
 
-  double getArea() => width * height;
-}
-
-String calculateArea(dynamic shape) {
-  if (shape is Circle) {
-    return 'Circle Area: ${shape.getArea()}';
-  } else if (shape is Rectangle) {
-    return 'Rectangle Area: ${shape.getArea()}';
-  } else {
-    return 'Unknown shape';
-  }
+  return '[$role] $fullName';
 }
 
 void main() {
-  var c = Circle().withRadius(6);
-  var r = Rectangle().withSize(4, 10);
-  var unknown = 'triangle';
+  var user1 = {'first': 'Omar', 'role': 'admin'};
+  var user2 = {'dsd' : 'sad'};
 
-  print(calculateArea(c));
-  print(calculateArea(r));
-  print(calculateArea(unknown));
+  print(formatUser(user1));
+  print(formatUser(user2));
 }
+
 
