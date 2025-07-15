@@ -1,0 +1,58 @@
+abstract class Payment {
+  double amount = 0;
+  String currency = 'EGP';
+  DateTime date = DateTime.now();
+
+  void pay();
+}
+
+class CardPayment extends Payment {
+  String cardNumber = '';
+
+  CardPayment configure(double value, String cur, String cardNo) {
+    amount = value;
+    currency = cur;
+    cardNumber = cardNo;
+    date = DateTime.now();
+    return this;
+  }
+
+  @override
+  void pay() {
+    print('Paid $amount $currency using card [$cardNumber]');
+  }
+}
+
+class CashPayment extends Payment {
+  @override
+  void pay() {
+    print('Paid $amount $currency in cash');
+  }
+}
+
+String handlePayment(dynamic payment) {
+  const rate = 0.03; // EGP to USD (مثال)
+
+  if (payment is Payment) {
+    if (payment.currency == 'EGP') {
+      payment
+        ..amount *= rate
+        ..currency = 'USD';
+    }
+    payment.pay();
+    return 'Payment processed successfully';
+  }
+
+  return 'Invalid payment method';
+}
+
+void main() {
+  var card = CardPayment().configure(1200, 'EGP', '**** **** **** 5678');
+  var cash = CashPayment()
+    ..amount = 60
+    ..currency = 'USD';
+
+  print(handlePayment(card));
+  print(handlePayment(cash));
+  print(handlePayment(123));
+}
